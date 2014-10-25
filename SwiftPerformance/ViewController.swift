@@ -12,21 +12,23 @@ class C {
     let foo = "foo"
     let bar = "bar"
     let baz = "baz"
-
-    init() {}
-    deinit {}
 }
-class S {
+struct S {
     let foo = "foo"
     let bar = "bar"
     let baz = "baz"
-
-    init() {}
+}
+class O: NSObject {
+    let foo = "foo"
+    let bar = "bar"
+    let baz = "baz"
 }
 
 class ViewController: UIViewController {
 
-    var N = 100000
+    var N = 10000
+
+    var result: Any?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,23 +36,61 @@ class ViewController: UIViewController {
 
 
     @IBAction func startTiming(sender: UIButton) {
-        perform("class ") {
+        perform("class     ") {
             var a = [C]()
             for _ in 1 ... self.N {
                 a.append(C())
             }
         }
-        perform("struct") {
+        perform("objc class") {
+            var a = [O]()
+            for _ in 1 ... self.N {
+                a.append(O())
+            }
+        }
+        perform("struct    ") {
             var a = [S]()
             for _ in 1 ... self.N {
                 a.append(S())
             }
         }
     }
-
+    @IBAction func startTimingForOptionalTypes(sender: UIButton) {
+        perform("optional    ") {
+            var i: Int? = 0
+            for x in 1 ... self.N {
+                i = (i ?? 0) + x
+            }
+            self.result = i // prevent optimization
+        }
+        perform("non-optional") {
+            var i: Int = 0
+            for x in 1 ... self.N {
+                i = i + x
+            }
+            self.result = i // prevent optimization
+        }
+    }
     func perform(name: String, block: () -> Void) {
-        var results = [NSTimeInterval]()
+        // rps: run per second
 
+        let t0 = getTime()
+        var count = 0
+        while true {
+            block()
+
+            count++
+            let elapsed = getTime() - t0
+            if elapsed >= 1.0 {
+                let rps = NSTimeInterval(count) / elapsed
+                println("\(name): \(Int(rps)) rps")
+                break;
+            }
+        }
+    }
+
+    func perform_(name: String, block: () -> Void) {
+        var results = [NSTimeInterval]()
         for _ in 1 ... 10 {
             let t0 = getTime()
             block()
