@@ -339,6 +339,7 @@
 				INFOPLIST_FILE = SwiftPerformance/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Debug;
 		};
@@ -405,6 +406,7 @@
 				FA2333AB19FB546E00935BD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FA2333AC19FB546E00935BD8 /* Build configuration list for PBXNativeTarget "SwiftPerformanceTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +415,7 @@
 				FA2333AE19FB546E00935BD8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
